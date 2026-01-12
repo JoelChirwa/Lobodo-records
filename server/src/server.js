@@ -26,6 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
   res.json({
+    title: "Lobodo Records API",
     message: "Lobodo Records API is working",
     status: "online",
     version: "1.0.0",
