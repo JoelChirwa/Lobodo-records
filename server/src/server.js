@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import mongoose from "mongoose";
 import connectDB from "./config/database.js";
 
 // Load environment variables
@@ -8,8 +9,8 @@ dotenv.config();
 
 const app = express();
 
-// Database connection
-connectDB();
+// Database connection (non-blocking for Vercel)
+connectDB().catch((err) => console.error("Database connection failed:", err));
 
 // Middleware
 app.use(cors());
