@@ -1,11 +1,15 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import connectDB from "./config/database.js";
 
 // Load environment variables
 dotenv.config();
 
 const app = express();
+
+// Database connection
+connectDB();
 
 // Middleware
 app.use(cors());
@@ -20,8 +24,33 @@ app.use(express.urlencoded({ extended: true }));
 // app.use('/api/studio', require('./routes/studio'));
 
 app.get("/", (req, res) => {
-  res.send("Lobodo API is working");
+  res.json({
+    message: "Lobodo Records API is working",
+    status: "online",
+    version: "1.0.0",
+  });
 });
+
+// Health check endpoint
+app.get("/api/health", (req, res) => {
+  res.json({
+    status: "healthy",
+    database:
+      mongoose.connection.readyState === 1 ? "connected" : "disconnected",
+  });
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({
+    message: "Something went wrong!",
+    error: process.env.NODE_ENV === "development" ? err.message : undefined,
+  });
+});
+
+// Export app for Vercel serverless function
+export default app;
 
 // For local development
 if (process.env.NODE_ENV !== "production") {

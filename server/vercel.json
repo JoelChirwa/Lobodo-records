@@ -1,16 +1,16 @@
 {
     "version": 2,
-    "name": "backend",
+    "name": "lobodo-backend",
     "builds": [
         {
-            "src": "server.js",
+            "src": "api/index.js",
             "use": "@vercel/node"
         }
     ],
-    "routes": [
+    "rewrites": [
         {
-            "src": "/(.*)",
-            "dest": "server.js"
+            "source": "/(.*)",
+            "destination": "/api/index.js"
         }
     ]
 }
